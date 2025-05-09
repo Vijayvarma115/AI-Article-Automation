@@ -39,7 +39,7 @@
     },
     {
       "parameters": {
-        "url": "https://newsapi.org/v2/everything?q=Artificial+Intelligence&apiKey=e8a6b7d5167044c789d6c4a6f6aafbd8",
+        "url": "https://newsapi.org/v2/everything?q=Artificial+Intelligence&apiKey=xxxxxxxxxa6f6aafbd8",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -67,7 +67,7 @@
     },
     {
       "parameters": {
-        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "model": "meta-llama/llama-4-scout-17b-xxxxxxx",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
@@ -76,18 +76,18 @@
         88,
         60
       ],
-      "id": "a04ee223-820b-419b-a259-fe0d06ca3aff",
+      "id": "a04ee223-820b-419xxxxxxxxxaff",
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
-          "id": "BowXevrOndnSH5AF",
+          "id": "BowXevrOxxxxAF",
           "name": "Groq account"
         }
       }
     },
     {
       "parameters": {
-        "sendTo": "threeonetwo519@gmail.com",
+        "sendTo": "xxxxxxxxxxxx@gmail.com",
         "subject": "={{ $json.subject }}",
         "message": "={{ $json.htmlBody }}",
         "options": {}

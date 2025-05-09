@@ -1,0 +1,205 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -660,
+        -160
+      ],
+      "id": "d0e1a8ac-e4d3-42c2-b045-c148700b7a2f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const articles = items[0].json.articles;\nif (!articles || articles.length === 0) {\n  return [{ json: { error: \"No articles found\" } }];\n}\n\nconst titles = articles.map(article => article.title);\n\nconst randomIndex = Math.floor(Math.random() * titles.length);\nconst selectedTitle = titles[randomIndex];\n\nreturn [{ json: { topic: selectedTitle } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        -160
+      ],
+      "id": "e499c576-d768-4c77-8ff7-d0bee0918d3b",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything?q=Artificial+Intelligence&apiKey=e8a6b7d5167044c789d6c4a6f6aafbd8",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -440,
+        -160
+      ],
+      "id": "e3d210c1-00b6-47f1-af68-dab1e3e7d660",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional AI writer who has 25yrs of exprience in writting down the article's. Write an informative, well-structured article.\nWrite a 600-word article about:  {{ $json.topic }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        0,
+        -160
+      ],
+      "id": "de168542-4994-4ef7-835c-a0b66fcb4bb3",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        88,
+        60
+      ],
+      "id": "a04ee223-820b-419b-a259-fe0d06ca3aff",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "BowXevrOndnSH5AF",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "threeonetwo519@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.htmlBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        596,
+        -160
+      ],
+      "id": "63741210-8cc9-463b-a058-6894ca8a7f71",
+      "name": "Gmail",
+      "webhookId": "f809a3d4-91fa-46a7-81c1-7e2de781be49",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1RcHDJuMaC5vDpcW",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const articleText = $json[\"text\"];\n\n// You may enhance it by converting bold **text** into `<strong>` using regex:\nconst formattedHTML = articleText\n  .replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>')\n  .replace(/\\n\\n/g, '<br><br>') // Paragraph breaks\n  .replace(/\\n/g, '<br>'); // Line breaks\n\nreturn [\n  {\n    json: {\n      subject: \"🚀 Weekly AI Article - DeepSeek Movement\",\n      htmlBody: `\n        <div style=\"font-family:Arial, sans-serif; line-height:1.6; color:#333; padding:20px; background:#f9f9f9;\">\n          <div style=\"max-width:700px; margin:auto; background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);\">\n            ${formattedHTML}\n            <br><br>\n            <hr style=\"border:none; border-top:1px solid #ddd;\">\n            <p style=\"font-size:14px; color:#777; text-align:center;\">\n              You are receiving this newsletter because you subscribed to AI Weekly. ❤️\n            </p>\n          </div>\n        </div>\n      `\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        376,
+        -160
+      ],
+      "id": "f0e76805-3d6c-4942-824a-28cbf6d8c014",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8fbc061b-5f6f-49da-a3d1-3f8f7ae69f0a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "723e17f17e831d1b3c89ade7dc566edc429856f391d2f068f560e3f93bedc91f"
+  },
+  "id": "ckfEIEVeOJ1GeofF",
+  "tags": []
+}

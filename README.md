@@ -25,6 +25,10 @@ This project automates the generation and delivery of weekly AI-related articles
 
 ---
 
+## Workflow
+
+![image](https://github.com/user-attachments/assets/026c39a3-5500-46a9-af71-16877032dbfe)
+
 ## 🔧 Workflow Breakdown
 
 1. **Trigger**: `Schedule Trigger` runs the workflow weekly.
@@ -35,6 +39,10 @@ This project automates the generation and delivery of weekly AI-related articles
 6. **Send Email**: `Gmail Node` sends the email with subject: _“🚀 Weekly AI Article - DeepSeek Movement”_.
 
 ---
+
+## Output
+
+![image](https://github.com/user-attachments/assets/1416d573-e8b4-4f4d-a9b5-e00cffa6748e)
 
 ## 📌 Future Enhancements
 
